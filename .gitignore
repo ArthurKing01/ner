@@ -1,0 +1,8 @@
+*.zip
+venv*
+models
+outKeras
+chinese_wwm*
+General_TinyBERT*
+*.h5/
+data
