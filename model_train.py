@@ -9,7 +9,7 @@ import argparse
 import kashgari
 from kashgari.corpus import DataReader
 from kashgari.embeddings import BertEmbedding
-from kashgari.tasks.labeling import BiLSTM_CRF_Model
+from kashgari.tasks.labeling import BiLSTM_CRF_Model, BiLSTM_Model, BiGRU_Model
 
 parser = argparse.ArgumentParser(description="your script description") 
 parser.add_argument('--model_path', '-m', required=False, type=str)
@@ -22,10 +22,10 @@ model_path = args.model_path if args.model_path else 'per_ner.h5'
 epochs = args.epochs if args.epochs else 1
 batch_size = args.batch_size if args.batch_size else 16
 
-train_x, train_y = DataReader().read_conll_format_file('./data/cluener_public/train.data')
-valid_x, valid_y = DataReader().read_conll_format_file('./data/cluener_public/dev.data')
-# train_x, train_y = DataReader().read_conll_format_file('./data/train_data.data')
-# valid_x, valid_y = DataReader().read_conll_format_file('./data/test_data.data')
+# train_x, train_y = DataReader().read_conll_format_file('./data/cluener_public/train.data')
+# valid_x, valid_y = DataReader().read_conll_format_file('./data/cluener_public/dev.data')
+train_x, train_y = DataReader().read_conll_format_file('./data/train_data.data')
+valid_x, valid_y = DataReader().read_conll_format_file('./data/test_data.data')
 # test_x, test_y = DataReader().read_conll_format_file('./data/time.test')
 
 if args.bert:
@@ -33,9 +33,13 @@ if args.bert:
                                task='labeling',
                                sequence_length=128)
 
-    model = BiLSTM_CRF_Model(bert_embedding)    
+    # model = BiGRU_Model(bert_embedding)    
+    model = BiLSTM_Model(bert_embedding)    
+    # model = BiLSTM_CRF_Model(bert_embedding)    
 else:
-    model = BiLSTM_CRF_Model()
+    # model = BiGRU_Model()
+    model = BiLSTM_Model()
+    # model = BiLSTM_CRF_Model()
 
 
 model.fit(train_x, train_y, valid_x, valid_y, batch_size=batch_size, epochs=epochs)
