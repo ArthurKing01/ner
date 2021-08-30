@@ -3,9 +3,7 @@
 # place: Zhichunlu Beijing
 
 import argparse
-
-
-
+import tensorflow as tf
 import kashgari
 from kashgari.corpus import DataReader
 from kashgari.embeddings import BertEmbedding
@@ -18,9 +16,22 @@ parser.add_argument('--epochs', '-e', required=False, type=int)
 parser.add_argument('--batch_size', '-bs', required=False, type=int)
 args = parser.parse_args()
 
+
+
 model_path = args.model_path if args.model_path else 'per_ner.h5'
 epochs = args.epochs if args.epochs else 1
 batch_size = args.batch_size if args.batch_size else 16
+
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  # Restrict TensorFlow to only use the first GPU
+  try:
+    tf.config.experimental.set_visible_devices(gpus[0], 'GPU')
+  except RuntimeError as e:
+    # Visible devices must be set at program startup
+    print(e)
+
 
 # train_x, train_y = DataReader().read_conll_format_file('./data/cluener_public/train.data')
 # valid_x, valid_y = DataReader().read_conll_format_file('./data/cluener_public/dev.data')
