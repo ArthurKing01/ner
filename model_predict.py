@@ -1,12 +1,14 @@
-# Load saved model
 import kashgari
 import argparse
+import os
+from dirs import keras_models_dir
 
 parser = argparse.ArgumentParser(description="your script description") 
-parser.add_argument('--model_path', '-m', required=False, type=str)
+parser.add_argument('--model_name', '-n', required=True, type=str)
 args = parser.parse_args()
 
-model_path = args.model_path + '.h5' if args.model_path else 'per_ner.h5'
+model_name = args.model_name
+model_path = os.path.join(keras_models_dir, model_name)
 
 loaded_model = kashgari.utils.load_model(model_path)
 loaded_model.tf_model.summary()

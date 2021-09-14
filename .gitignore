@@ -6,3 +6,8 @@ chinese_wwm*
 General_TinyBERT*
 *.h5/
 data
+web_models
+tflite_models
+pb_models
+keras_models
+__pycache__
