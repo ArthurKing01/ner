@@ -12,6 +12,8 @@ parser.add_argument('--bert', '-b', required=False, type=bool)
 parser.add_argument('--crf', '-c', required=False, type=bool)
 parser.add_argument('--epochs', '-e', required=False, type=int)
 parser.add_argument('--batch_size', '-bs', required=False, type=int)
+parser.add_argument('--train_data', required=False, type=str)
+parser.add_argument('--test_data', required=False, type=str)
 args = parser.parse_args()
 
 print('args:', args)
@@ -29,9 +31,12 @@ if gpus:
     # Visible devices must be set at program startup
     print(e)
 
+train_data = 'train_data.data' if not args.train_data else args.train_data
+test_data = 'test_data.data' if not args.test_data else args.test_data
 
-train_x, train_y = DataReader().read_conll_format_file(os.path.join(data_dir, 'train_data.data'))
-valid_x, valid_y = DataReader().read_conll_format_file(os.path.join(data_dir, 'test_data.data'))
+
+train_x, train_y = DataReader().read_conll_format_file(os.path.join(data_dir, train_data))
+valid_x, valid_y = DataReader().read_conll_format_file(os.path.join(data_dir, test_data))
 
 if args.bert:
     bert_embedding = BertEmbedding('chinese_wwm_ext_L-12_H-768_A-12',
