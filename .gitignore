@@ -11,3 +11,4 @@ tflite_models
 pb_models
 keras_models
 __pycache__
+.vscode
